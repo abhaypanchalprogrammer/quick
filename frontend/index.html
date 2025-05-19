@@ -77,6 +77,22 @@
         color: #fff;
         word-break: break-word;
       }
+      #codeBox button {
+        margin-top: 10px;
+        width: auto;
+        padding: 8px 16px;
+        background: #03dac6;
+        color: #000;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      #codeBox button:hover {
+        background: #00c4b4;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      }
     </style>
   </head>
   <body>
@@ -86,6 +102,8 @@
       <button onclick="generateCode()">Generate Code</button>
       <div id="codeBox" style="display: none">
         <p>Your Code: <span id="codeDisplay"></span></p>
+        <button onclick="copyCode()">Copy Code</button>
+        <p id="copy"></p>
       </div>
 
       <h3>Retrieve Text</h3>
@@ -126,6 +144,22 @@
           document.getElementById("retrievedText").textContent = "";
         }
       }
+      function copyCode() {
+        const code = document.getElementById("codeDisplay").textContent;
+        if (!code) return alert("No code to copy!");
+
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            document.getElementById("copy").textContent = "Text Copied";
+          })
+          .catch((err) => {
+            console.error("Failed to copy code: ", err);
+          });
+      }
+      document.getElementById("textInput").addEventListener("input", () => {
+        document.getElementById("copy").textContent = "";
+      });
     </script>
   </body>
 </html>
