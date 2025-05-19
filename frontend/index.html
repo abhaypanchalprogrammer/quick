@@ -77,7 +77,8 @@
         color: #fff;
         word-break: break-word;
       }
-      #codeBox button {
+      #codeBox button,
+      #btn {
         margin-top: 10px;
         width: auto;
         padding: 8px 16px;
@@ -88,7 +89,8 @@
         transition: all 0.3s ease;
       }
 
-      #codeBox button:hover {
+      #codeBox button:hover,
+      #btn:hover {
         background: #00c4b4;
         transform: translateY(-1px);
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
@@ -110,6 +112,10 @@
       <input type="text" id="codeInput" placeholder="Enter your code" />
       <button onclick="retrieveText()">Retrieve</button>
       <p id="retrievedText"></p>
+      <button onclick="copyCode2()" id="btn" style="display: none">
+        Copy Code
+      </button>
+      <p id="copy2"></p>
     </div>
 
     <script>
@@ -139,9 +145,11 @@
         const data = await res.json();
         if (data.text) {
           document.getElementById("retrievedText").textContent = data.text;
+          document.getElementById("btn").style.display = "inline-block";
         } else {
           alert("Code not found or expired.");
           document.getElementById("retrievedText").textContent = "";
+          document.getElementById("btn").style.display = "none";
         }
       }
       function copyCode() {
@@ -157,8 +165,22 @@
             console.error("Failed to copy code: ", err);
           });
       }
+      function copyCode2() {
+        const code2 = document.getElementById("retrievedText").textContent;
+        if (!code2) return alert("No code to copy!");
+
+        navigator.clipboard
+          .writeText(code2)
+          .then(() => {
+            document.getElementById("copy2").textContent = "Text Copied";
+          })
+          .catch((err) => {
+            console.error("Failed to copy code: ", err);
+          });
+      }
       document.getElementById("textInput").addEventListener("input", () => {
         document.getElementById("copy").textContent = "";
+        document.getElementById("copy2").textContent = "";
       });
     </script>
   </body>
